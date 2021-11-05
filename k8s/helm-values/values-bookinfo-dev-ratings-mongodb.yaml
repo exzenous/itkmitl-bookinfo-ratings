@@ -1,0 +1,12 @@
+image:
+  tag: 5.0.3-debian-10-r30 # use newer version of debian from user pref
+auth:
+  enabled: true
+  username: ratings
+  database: ratings
+  existingSecret: bookinfo-dev-ratings-mongodb-secret
+  # Secret - Sensitive Data
+persistence:
+  enabled: false
+initdbScriptsConfigMap: bookinfo-dev-ratings-mongodb-initdb
+# Non-Sensitive Data
