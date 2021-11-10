@@ -2,9 +2,9 @@ name: hello-world
 on: [push]
 jobs:
   print-hello-world:
-    runs-on: ubuntu-20.04
-    steps:
+    runs-on: ubuntu-20.04 # Runner
+    steps: # Each Steps is Action in List
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2 # Use something from Marketplace
       - run: echo "Hello World"
       - run: ls -l
