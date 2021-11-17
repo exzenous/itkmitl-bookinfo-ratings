@@ -49,3 +49,9 @@ jobs:
                 "COMMIT_SHA": "${{ github.sha }}"
               }
             }
+  test:
+    needs: deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Retrive Health Status
+        run: curl http://itkmitl.bookinfo.dev.opsta.net/student5/ratings/health | grep "Ratings is working"
