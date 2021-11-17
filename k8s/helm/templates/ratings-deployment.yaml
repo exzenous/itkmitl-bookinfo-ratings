@@ -20,20 +20,44 @@ spec:
         image: ghcr.io/exzenous/bookinfo-ratings:dev
         imagePullPolicy: Always # Always required! - docker pull on new version of app or not
         # If not present - not always
-        env:
-        - name: SERVICE_VERSION
-          value: v2
-        - name: MONGO_DB_URL
-          value: mongodb://bookinfo-dev-ratings-mongodb:27017/ratings
-        - name: MONGO_DB_USERNAME
-          value: ratings
-        - name: MONGO_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: bookinfo-dev-ratings-mongodb-secret
-              key: mongodb-password
+        # env:
+        # - name: SERVICE_VERSION
+        #   value: v2
+        # - name: MONGO_DB_URL
+        #   value: mongodb://bookinfo-dev-ratings-mongodb:27017/ratings
+        # - name: MONGO_DB_USERNAME
+        #   value: ratings
+        # - name: MONGO_DB_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: bookinfo-dev-ratings-mongodb-secret
+        #       key: mongodb-password
         # env:
         # - name: SERVICE_VERSION
         #   value: v1
+        {{- if or (.Values.extraEnv) (.Values.extraEnvSecret) }}
+        env:
+
+        {{- if .Values.extraEnv }}
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+
+        {{- if .Values.extraEnvSecret }}
+        {{- range $key, $value := .Values.extraEnvSecret }}
+        {{- range $secretName, $secretValue := $value }}
+        - name: {{ $key }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ $secretName }}
+              key: {{ $secretValue | quote }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+
+        {{- end }}
+
       imagePullSecrets: # Use which secret
       - name: registry-bookinfo
